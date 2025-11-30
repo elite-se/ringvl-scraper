@@ -26,7 +26,7 @@ http.createServer(async (req, res) => {
       const text = node.text()
       const dateIndex = text.search(dateRE)
       const dateString = text.substring(dateIndex + 1, text.length - 1).split('.')
-      const date = new Date(Date.UTC(parseInt(dateString[2]), parseInt(dateString[1]) - 1, parseInt(dateString[0]), 16))
+      const date = new Date(parseInt(dateString[2]), parseInt(dateString[1]) - 1, parseInt(dateString[0]), 16)
       const person = text.substring(17, dateIndex - 1)
       const url = node.attr()['href']
       lectures.push({ 'url': url, 'date': date, 'person': person })
@@ -44,6 +44,7 @@ http.createServer(async (req, res) => {
     calendar.createEvent({
       start: e.date,
       end: end,
+      timezone: 'Europe/Berlin',
       summary: 'Ringvorlesung: ' + e.person,
       url: e.url
     })
