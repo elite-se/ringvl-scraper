@@ -34,10 +34,22 @@ http.createServer(async (req, res) => {
   }
 
   for (const e of lectures) {
-    const html = await fetch(e.url)
+    const html = await (await fetch(e.url)).text()
     const $ = cheerio.load(html)
 
-    // TODO: parse stuff
+    let description = ""
+
+    $('#content div.entry').first().children().each((i, e) => {
+      if(i == 0) return
+
+      const node = $(e)
+      
+      description += node.text().trim()
+      if (node[0].name == 'h2') {
+        description += ':'
+      }
+      description += '\n\n'
+    })
 
     const end = new Date(e.date.getTime() + 2 * 60 * 60 * 1000)
 
@@ -46,7 +58,8 @@ http.createServer(async (req, res) => {
       end: end,
       timezone: 'Europe/Berlin',
       summary: 'Ringvorlesung: ' + e.person,
-      url: e.url
+      url: e.url,
+      description: description.trim()
     })
   }
 
