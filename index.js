@@ -40,8 +40,6 @@ http.createServer(async (req, res) => {
     let description = ""
 
     $('#content div.entry').first().children().each((i, e) => {
-      if(i == 0) return
-
       const node = $(e)
       
       description += node.text().trim()
